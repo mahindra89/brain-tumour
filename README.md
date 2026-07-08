@@ -1,126 +1,94 @@
-# Brain Tumor Detection (End-to-End)
+# Brain Tumor MRI Explorer
 
-## Introduction
+This repository contains an interactive Streamlit portfolio page for a brain MRI
+classification project. The original application was a Flask app that expected a
+trained PyTorch ResNet-50 model artifact for live tumor classification.
 
-This project is a **Flask web application** for detecting brain tumors from MRI images using a deep learning model built with **PyTorch**. Users can upload MRI images through the app, and the model will classify them as either tumor or non-tumor. The goal of this project is to provide an intuitive interface for medical professionals to quickly identify potential brain tumors.
+The current online version is designed to work reliably on Streamlit Cloud:
 
-### Dataset:
-- The dataset contains MRI images, divided into two categories: **tumor** and **non-tumor**.
-- Preprocessing techniques are applied to the dataset to ensure optimal model performance.
+- explore included sample MRI images
+- upload an image for preprocessing review
+- inspect image dimensions and intensity statistics
+- understand the intended ResNet-50 classification pipeline
+- see what is required to enable real model inference
 
-## Project Overview
+## Safety Notice
 
-This end-to-end project consists of:
-1. **Data Loading**: Load MRI images for training, validation, and testing.
-2. **Data Preprocessing**: Apply normalization, resizing, and augmentation techniques.
-3. **Model Building**: Build a Convolutional Neural Network (CNN) using **PyTorch** to classify the MRI images.
-4. **Model Training**: Train the model on GPU (if available) to detect brain tumors.
-5. **Flask Web Application**: Develop a Flask app for user interaction, allowing image uploads for tumor detection.
-6. **Model Deployment**: Deploy the trained model within the Flask app.
-7. **Prediction**: Provide real-time predictions through the Flask web app.
+This project is an educational demo only. It is not a medical device and must
+not be used for diagnosis, treatment decisions, or clinical screening.
 
-## Model Download and Directory Structure
-
-### Pretrained Model:
-You can download the pretrained model from the following link:
-[Brain Tumor Detection Model](https://drive.google.com/file/d/1LJG_ITCWWtriLC5NPrWxIDwekWbhU_Rj/view?usp=sharing)
-
-### Directory Structure:
-```
-Brain-Tumor-Detection/
-│
-├── app/
-│   ├── static/                 # CSS, JS, and images for the Flask web app
-│   ├── templates/              # HTML templates for the Flask app
-│   └── app.py                  # Main Flask application
-│
-├── model/
-│   └── brain_tumor_model.pth   # Pretrained PyTorch model
-│
-├── data/
-│   ├── train/                  # Training MRI images
-│   ├── test/                   # Testing MRI images
-│
-├── src/
-│   ├── dataset.py              # Script to load and preprocess the dataset
-│   ├── model.py                # CNN model architecture using PyTorch
-│   └── train.py                # Script to train the model
-│
-├── README.md                   # Project documentation
-└── requirements.txt            # List of required Python packages
-```
-
-## Setup Instructions
-
-### Step 1: Create a Virtual Environment
-
-Create a virtual environment to isolate the dependencies for this project.
-
-```bash
-# For Windows
-python -m venv venv
-venv\Scripts\activate
-
-# For macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### Step 2: Install Required Libraries
-
-Install the dependencies listed in `requirements.txt`:
+## Run Locally
 
 ```bash
 pip install -r requirements.txt
+python -m streamlit run app.py
 ```
 
-### Step 3: Download the Pretrained Model
+## Streamlit Cloud
 
-Download the pretrained model from [this link](https://drive.google.com/file/d/1LJG_ITCWWtriLC5NPrWxIDwekWbhU_Rj/view?usp=sharing) and place it in the `model/` directory as `brain_tumor_model.pth`.
+Use:
 
-### Step 4: Running the Flask App
-
-To start the Flask web app, navigate to the `app/` directory and run the `app.py` file:
-
-```bash
-cd app/
-python app.py
+```text
+Main file path: app.py
 ```
 
-The app will be hosted at `http://127.0.0.1:5000/`. You can open the URL in your browser and upload MRI images to receive predictions.
+The app uses only lightweight dependencies listed in `requirements.txt`.
 
-## Flask Web Application Features
+## Model Artifact
 
-- **Image Upload**: Users can upload MRI images through the web interface.
-- **Tumor Detection**: The uploaded image is fed into the model to predict whether a tumor is present.
-- **Result Display**: The result is displayed on the same page with either a "Tumor" or "Non-Tumor" label.
+The legacy Flask app expected this file:
 
-## Model Architecture
+```text
+models/bt_resnet50_model.pt
+```
 
-The model used in this project is a **Convolutional Neural Network (CNN)** built using **PyTorch**. The architecture has been optimized for image classification tasks and consists of several layers:
+That trained model file is not currently included in the repository. Because of
+that, the deployed app does not claim live tumor predictions. It provides an
+interactive image explorer and deployment-ready project explanation instead.
 
-### Key Layers:
-- **Convolutional Layers**: For feature extraction from MRI images.
-- **Max Pooling Layers**: For downsampling and reducing spatial dimensions.
-- **Fully Connected Layers**: For classification.
-- **Softmax Activation**: To produce the output probability of each class (Tumor/Non-Tumor).
+To enable live predictions later:
 
-## Data Preprocessing
+1. Add `models/bt_resnet50_model.pt`, or host it from a reliable download URL.
+2. Add PyTorch and TorchVision dependencies.
+3. Load the model in Streamlit with caching.
+4. Run inference only with clear educational/medical disclaimers.
 
-To ensure the CNN model performs optimally, the following preprocessing steps are applied:
-- **Grayscale Conversion**: All MRI images are converted to grayscale.
-- **Resizing**: Images are resized to 64x64 pixels for uniformity.
-- **Normalization**: Each pixel value is normalized to a range of [0, 1].
-- **Data Augmentation**: Techniques like random rotation, flipping, and zooming are applied to expand the dataset and prevent overfitting.
+## Project Structure
 
-## Conclusion
+```text
+.
+|-- app.py                    # Streamlit app for the online project page
+|-- legacy_flask_app.py       # Original Flask implementation
+|-- Brain-Tumor-Test-Images/  # Sample MRI images used by the app
+|-- models/                   # Placeholder for the trained model artifact
+|-- static/                   # Original static assets
+|-- templates/                # Original Flask templates
+|-- requirements.txt          # Streamlit Cloud dependencies
+`-- README.md
+```
 
-This Flask web app provides an end-to-end solution for detecting brain tumors using MRI images. With a simple user interface and a powerful backend, it can serve as a diagnostic tool for medical professionals. The project can be further enhanced by incorporating additional data, improving model accuracy, or deploying the app to a cloud platform like Heroku.
+## Intended Model Workflow
 
-## Future Enhancements
+The original code defines a ResNet-50 classifier with a custom fully connected
+head. The intended output classes are:
 
-- **Integration with Cloud Platforms**: Deploy the app on Heroku or AWS for wider accessibility.
-- **Mobile Application**: Develop a mobile app to upload MRI images and get predictions on the go.
-- **Transfer Learning**: Incorporate pre-trained models like ResNet to further improve accuracy.
+- No tumor
+- Meningioma
+- Glioma
+- Pituitary
 
----
+The expected workflow is:
+
+1. Upload or select an MRI image.
+2. Resize and convert the image into a tensor.
+3. Pass the tensor through the ResNet-50 feature extractor.
+4. Classify the MRI image into one of the target classes.
+5. Present the output with a clear medical safety disclaimer.
+
+## Next Improvements
+
+- Add the trained model artifact or a reliable model download path.
+- Add a small validation/results section with accuracy, precision, recall, and F1.
+- Add example predictions from a fixed sample set.
+- Add Grad-CAM or saliency visualizations for explainability.
+- Separate model-loading utilities from the UI code once inference is enabled.
