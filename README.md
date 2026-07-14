@@ -12,6 +12,10 @@ The current online version is designed to work reliably on Streamlit Cloud:
 - understand the intended ResNet-50 classification pipeline
 - see what is required to enable real model inference
 
+## Live Demo
+
+[Open the Streamlit app](https://brain-tumor-detectionproject.streamlit.app/)
+
 ## Safety Notice
 
 This project is an educational demo only. It is not a medical device and must
